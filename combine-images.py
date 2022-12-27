@@ -21,15 +21,6 @@ base_path = os.path.dirname(os.path.abspath(__file__))
 output_path = os.path.join(base_path, 'combine-image-data-modified')
 
 
-# Remove directory after combining
-def remove_dir(path):
-    """ param <path> could either be relative or absolute. """
-    if os.path.isfile(path) or os.path.islink(path):
-        os.remove(path)  # remove the file
-    elif os.path.isdir(path):
-        shutil.rmtree(path)  # remove dir and all contains
-    else:
-        raise ValueError("file {} is not a file or dir.".format(path))
 
 
 # Combine images
@@ -157,6 +148,17 @@ def generate_hangul_combined_image(output_dir):
             for src_path, dst_path in zip(src_paths, dst_paths):
                 process(src_path, dst_path, image_dir)
                 complete()
+                
+                
+# Remove directory after combining
+#def remove_dir(path):
+#    """ param <path> could either be relative or absolute. """
+#    if os.path.isfile(path) or os.path.islink(path):
+#        os.remove(path)  # remove the file
+#    elif os.path.isdir(path):
+#        shutil.rmtree(path)  # remove dir and all contains
+#    else:
+#        raise ValueError("file {} is not a file or dir.".format(path))
 
 
 if __name__ == '__main__':
