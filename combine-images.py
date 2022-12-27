@@ -11,15 +11,13 @@ import numpy as np
 import threading
 import shutil
 
-sess = tf.compat.vi.Session()
-
 # Setting global variable for counter 
 total_count = 0
 
 
 # Default data paths.
 base_path = os.path.dirname(os.path.abspath(__file__))
-lbl_path = os.path.join(base_path,'labels/2350-unicode.txt')
+#lbl_path = os.path.join(base_path,'labels/2350-unicode.txt')
 output_path = os.path.join(base_path, 'combine-image-data-modified')
 
 
@@ -55,7 +53,8 @@ def combine(src, src_path):
     height, width, _ = src.shape
     if height != sibling.shape[0] or width != sibling.shape[1]:
         raise Exception("differing sizes")
-    
+
+
     # Convert all images to RGB if necessary
     if src.shape[2] == 1:
         src = im.grayscale_to_rgb(images=src)
@@ -115,7 +114,8 @@ def complete():
 
 
 # Generate combined image
-def generate_hangul_combined_image(label_file, output_dir):
+#def generate_hangul_combined_image(label_file, output_dir):
+def generate_hangul_combined_image(output_dir):
     if not os.path.exists(args.output_dir):
         os.makedirs(args.output_dir)
 
@@ -168,10 +168,11 @@ if __name__ == '__main__':
     
     # combine
     parser.add_argument("--b_dir", type=str, help="path to folder containing target font images for combine operation")
-    parser.add_argument('--label-file', type=str, dest='label_file', default=lbl_path, help='File containing newline delimited labels.')
+    #parser.add_argument('--label-file', type=str, dest='label_file', default=lbl_path, help='File containing newline delimited labels.')
     args = parser.parse_args()
 
-    generate_hangul_combined_image(args.label_file, args.output_dir)
+    #generate_hangul_combined_image(args.label_file, args.output_dir)
+    generate_hangul_combined_image(args.output_dir)
 
     # remove the src and target directories
     """
