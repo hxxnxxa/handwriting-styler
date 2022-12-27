@@ -42,21 +42,13 @@ def generate_hangul_images(lbl, tgt_fonts_dir, output_dir):
 
 
     # Get a list of the fonts.
-    fonts = glob.glob(os.path.join(tgt_fonts_dir, '*.ttf')) # 5개
-    fonts_name = os.listdir('fonts/tgt_font_selected') # 5개
+    fonts = glob.glob(os.path.join(tgt_fonts_dir, '*.ttf'))
+    fonts_name = os.listdir('fonts/tgt_font_selected')
 
     total_count = 0
     prev_count = 0
     font_count = 0
     char_no = 0
-    idx = 0
-    
-    #print("type of fonts_name : ", type(fonts_name))
-    #print("fonts_name[0] : ",os.path.splitext(fonts_name[idx])[0])
-    #print("fonts_name[1] : ",os.path.splitext(fonts_name[idx+1])[0])
-    #print("fonts_name[2] : ",os.path.splitext(fonts_name[idx+2])[0])
-    #print("fonts_name[3] : ",os.path.splitext(fonts_name[idx+3])[0])
-    #print("fonts_name[4] : ",os.path.splitext(fonts_name[idx+4])[0])
 
 
     # Total number of font files is 

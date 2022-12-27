@@ -140,18 +140,14 @@ def generate_font_skeleton_combine_images(label_file, output_dir):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input_dir", required=True, 
-                            help="path to folder containing source font images")
-    parser.add_argument('--output-dir', type=str, dest='output_dir',
-                            default=DEFAULT_OUTPUT_DIR,
-                            help='Output directory to store combine images.')
+    parser.add_argument("--input_dir", required=True, help="path to folder containing source font images")
+    parser.add_argument('--output-dir', type=str, dest='output_dir', default=DEFAULT_OUTPUT_DIR, help='Output directory to store combine images.')
     parser.add_argument("--operation", required=True, choices=["combine"])
     parser.add_argument("--workers", type=int, default=1, help="number of workers")
+    
     # combine
     parser.add_argument("--b_dir", type=str, help="path to folder containing target font images for combine operation")
-    parser.add_argument('--label-file', type=str, dest='label_file',
-                        default=DEFAULT_LABEL_FILE,
-                        help='File containing newline delimited labels.')
+    parser.add_argument('--label-file', type=str, dest='label_file', default=DEFAULT_LABEL_FILE, help='File containing newline delimited labels.')
     args = parser.parse_args()
 
     generate_font_skeleton_combine_images(args.label_file, args.output_dir)
