@@ -1,8 +1,9 @@
-# imprts related to creating paths
+# Import related to creating paths
 import os
 import argparse
 
-# imports related to preprocess from pix2pix
+
+# Import related to preprocess from pix2pix
 import tfimage as im
 import time
 import tensorflow as tf
@@ -10,15 +11,19 @@ import numpy as np
 import threading
 import shutil
 
-# setting global variable for counter 
+sess = tf.compat.vi.Session()
+
+# Setting global variable for counter 
 total_count = 0
 
-SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 # Default data paths.
-DEFAULT_LABEL_FILE = os.path.join(SCRIPT_PATH,'labels/2350-common-hangul.txt')
-DEFAULT_OUTPUT_DIR = os.path.join(SCRIPT_PATH, 'combine-image-data')
+base_path = os.path.dirname(os.path.abspath(__file__))
+lbl_path = os.path.join(base_path,'labels/2350-unicode.txt')
+output_path = os.path.join(base_path, 'combine-image-data-modified')
 
+
+# Remove directory after combining
 def remove_dir(path):
     """ param <path> could either be relative or absolute. """
     if os.path.isfile(path) or os.path.islink(path):
@@ -28,9 +33,12 @@ def remove_dir(path):
     else:
         raise ValueError("file {} is not a file or dir.".format(path))
 
+
+# Combine images
 def combine(src, src_path):
     if args.b_dir is None:
         raise Exception("missing b_dir")
+
 
     # Find corresponding file in b_dir, could have a different extension
     basename, _ = os.path.splitext(os.path.basename(src_path))
@@ -42,19 +50,21 @@ def combine(src, src_path):
     else:
         raise Exception("could not find sibling image for " + src_path)
 
-    # make sure that dimensions are correct
+
+    # Make sure that dimensions are correct
     height, width, _ = src.shape
     if height != sibling.shape[0] or width != sibling.shape[1]:
         raise Exception("differing sizes")
     
-    # convert all images to RGB if necessary
+    # Convert all images to RGB if necessary
     if src.shape[2] == 1:
         src = im.grayscale_to_rgb(images=src)
 
     if sibling.shape[2] == 1:
         sibling = im.grayscale_to_rgb(images=sibling)
 
-    # remove alpha channel
+
+    # Remove alpha channel
     if src.shape[2] == 4:
         src = src[:,:,:3]
     
@@ -63,6 +73,8 @@ def combine(src, src_path):
 
     return np.concatenate([src, sibling], axis=1)
 
+
+# Process 
 def process(src_path, dst_path, image_dir):
     global total_count
 
@@ -75,11 +87,15 @@ def process(src_path, dst_path, image_dir):
         raise Exception("invalid operation")
     im.save(dst, dst_path)
 
+
+# Initialize
 complete_lock = threading.Lock()
 start = None
 num_complete = 0
 total = 0
 
+
+# Complete
 def complete():
     global num_complete, rate, last_complete
 
@@ -97,9 +113,12 @@ def complete():
 
         last_complete = now
 
-def generate_font_skeleton_combine_images(label_file, output_dir):
+
+# Generate combined image
+def generate_hangul_combined_image(label_file, output_dir):
     if not os.path.exists(args.output_dir):
         os.makedirs(args.output_dir)
+
 
     # Set the path of hangul-skeleton-combine images in output directory. It will be used later for 
     # setting up hangul-skeleton-combine images path for hangul-skeleton-combine labels
@@ -109,6 +128,7 @@ def generate_font_skeleton_combine_images(label_file, output_dir):
 
     src_paths = []
     dst_paths = []
+
 
     # Check if the directory and images already exsist?
     # If yes then skip those images else create the paths list
@@ -138,24 +158,27 @@ def generate_font_skeleton_combine_images(label_file, output_dir):
                 process(src_path, dst_path, image_dir)
                 complete()
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--input_dir", required=True, help="path to folder containing source font images")
-    parser.add_argument('--output-dir', type=str, dest='output_dir', default=DEFAULT_OUTPUT_DIR, help='Output directory to store combine images.')
+    parser.add_argument('--output-dir', type=str, dest='output_dir', default=output_path, help='Output directory to store combine images.')
     parser.add_argument("--operation", required=True, choices=["combine"])
     parser.add_argument("--workers", type=int, default=1, help="number of workers")
     
     # combine
     parser.add_argument("--b_dir", type=str, help="path to folder containing target font images for combine operation")
-    parser.add_argument('--label-file', type=str, dest='label_file', default=DEFAULT_LABEL_FILE, help='File containing newline delimited labels.')
+    parser.add_argument('--label-file', type=str, dest='label_file', default=lbl_path, help='File containing newline delimited labels.')
     args = parser.parse_args()
 
-    generate_font_skeleton_combine_images(args.label_file, args.output_dir)
+    generate_hangul_combined_image(args.label_file, args.output_dir)
 
     # remove the src and target directories
+    """
     src_head, _ = os.path.split(args.input_dir)
     trg_head, _ = os.path.split(args.b_dir)
     print("Removing the directories")
     remove_dir(src_head)
     remove_dir(trg_head)
     print("*** DONE ***")
+    """
