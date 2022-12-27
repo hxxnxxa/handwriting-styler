@@ -4,38 +4,45 @@ import argparse
 import glob
 import io
 import os
-
 from PIL import Image, ImageFont, ImageDraw
 
-SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 # Default data paths.
-DEFAULT_LABEL_FILE = os.path.join(SCRIPT_PATH,'labels/2350-common-hangul.txt')
-#DEFAULT_LABEL_FILE = os.path.join(SCRIPT_PATH,'labels/210-uniform.txt')
-DEFAULT_FONTS_DIR = os.path.join(SCRIPT_PATH, 'fonts/tgt_font')
-#DEFAULT_OUTPUT_DIR = os.path.join(SCRIPT_PATH, 'tgt-image-data')
-DEFAULT_OUTPUT_DIR = os.path.join(SCRIPT_PATH, 'tgt-image-data-modified')
+base_path = os.path.dirname(os.path.abspath(__file__))
+lbl_path = os.path.join(base_path, 'labels/2350-unicode.txt')
+tgt_ttf_path = os.path.join(base_path, 'fonts/tgt_font')
+output_path = os.path.join(base_path, 'tgt-image-data-modified')
+
 
 # Width and height of the resulting image.
-IMAGE_WIDTH = 256
-IMAGE_HEIGHT = 256
+width = 256
+height = 256
 
-def generate_hangul_images(label_file, fonts_dir, output_dir):
+
+# Generate Korean images
+def generate_hangul_images(lbl, tgt_fonts_dir, output_dir):
     """Generate Hangul image files.
 
     This will take in the passed in labels file and will generate several
     images using the font files provided in the font directory. The font
     directory is expected to be populated with *.ttf (True Type Font) files.
-    The generated images will be stored in the given output directory.    """
-    with io.open(label_file, 'r', encoding='utf-8') as f:
+    The generated images will be stored in the given output directory.    
+    """
+    
+    
+    #Read syllables
+    with io.open(lbl, 'r', encoding='utf-8') as f:
         labels = f.read().splitlines()
 
+    
+    # Path of the output image 
     image_dir = os.path.join(output_dir, 'images')
     if not os.path.exists(image_dir):
         os.makedirs(os.path.join(image_dir))
 
+
     # Get a list of the fonts.
-    fonts = glob.glob(os.path.join(fonts_dir, '*.ttf'))
+    fonts = glob.glob(os.path.join(tgt_fonts_dir, '*.ttf'))
 
     total_count = 0
     prev_count = 0
@@ -55,12 +62,12 @@ def generate_hangul_images(label_file, fonts_dir, output_dir):
         for font in fonts:
             total_count += 1
             font_count += 1
-            image = Image.new('L', (IMAGE_WIDTH, IMAGE_HEIGHT), color=0)
-            font = ImageFont.truetype(font, 170)
+            image = Image.new('L', (width, height), color=0)
+            font = ImageFont.truetype(font, 160)
             drawing = ImageDraw.Draw(image)
             w, h = drawing.textsize(character, font=font)
             drawing.text(
-                ((IMAGE_WIDTH-w)/2, (IMAGE_HEIGHT-h)/2),
+                ((width-w)/2, (height-h)/2),
                 character,
                 fill=(255),
                 font=font
@@ -73,14 +80,11 @@ def generate_hangul_images(label_file, fonts_dir, output_dir):
 
     print('Finished generating {} images.'.format(total_count))
 
+
 if __name__ == '__main__':
-
     parser = argparse.ArgumentParser()
-    
-    parser.add_argument('--label-file', type=str, dest='label_file', default=DEFAULT_LABEL_FILE, help='File containing newline delimited labels.')
-    parser.add_argument('--font-dir', type=str, dest='fonts_dir', default=DEFAULT_FONTS_DIR, help='Directory of ttf fonts to use.')
-    parser.add_argument('--output-dir', type=str, dest='output_dir', default=DEFAULT_OUTPUT_DIR, help='Output directory to store generated images.')
-
+    parser.add_argument('--label-file', type=str, dest='lbl', default=lbl, help='File containing newline delimited labels.')
+    parser.add_argument('--font-dir', type=str, dest='tgt_fonts_dir', default=tgt_ttf_path, help='Directory of ttf fonts to use.')
+    parser.add_argument('--output-dir', type=str, dest='output_dir', default=output_dir, help='Output directory to store generated images.')
     args = parser.parse_args()
-
-    generate_hangul_images(args.label_file, args.fonts_dir, args.output_dir)
+    generate_hangul_images(args.lbl, args.tgt_fonts_dir, args.output_dir)
