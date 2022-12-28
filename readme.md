@@ -10,7 +10,7 @@ started at December 23th Friday, 2022
 <br>
 
 <h2>Architecture</h2>
-<img src="images\architecture\architecture.png"/>
+<img src="architecture\architecture.png"/>
 
 <br>
 
