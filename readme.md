@@ -69,6 +69,9 @@ python test-images-to-tfrecords.py
 python main.py --mode test --output_dir testing --checkpoint trained_model
 ```
 
+<br>
+<br>
+
 <h3>2) Finetuning</h3>
 
 <b>Finetune the model</b>
