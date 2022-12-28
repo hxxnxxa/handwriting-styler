@@ -4,3 +4,8 @@ testing/*
 test-tfrecords-output/*
 train-tfrecords-output/*
 images/*
+trained_model-modified/*
+finetuned_model-modified/*
+testing-modified/*
+test-tfrecords-output-modified/*
+train-tfrecords-output-modified/*
