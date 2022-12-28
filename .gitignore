@@ -9,3 +9,4 @@ finetuned_model-modified/*
 testing-modified/*
 test-tfrecords-output-modified/*
 train-tfrecords-output-modified/*
+dst_dir/*
