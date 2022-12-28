@@ -1,17 +1,21 @@
 started at December 23th Friday, 2022
 
+<br>
+<br>
+
 <div align='center'>
     <h1>Generate user`s handwriting style</h1>
 </div>
 
 <h2>Introduction</h2>
 
-
+<br>
 <br>
 
 <h2>Architecture</h2>
 <img src="architecture\architecture.png"/>
 
+<br>
 <br>
 
 <h2>Environment</h2>
@@ -19,7 +23,7 @@ started at December 23th Friday, 2022
 
 <br>
 
-<h2>2. How to use</h2>
+<h2>How to use</h2>
 
 <b>Generate Source Images</b>
 
