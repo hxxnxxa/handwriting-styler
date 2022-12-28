@@ -24,6 +24,7 @@ started at December 23th Friday, 2022
 <br>
 
 <h2>How to use</h2>
+<h3>1) Pretraining</h3>
 
 <b>Generate Source Images</b>
 
@@ -66,6 +67,8 @@ python test-images-to-tfrecords.py
 ```python
 python main.py --mode test --output_dir testing --checkpoint trained_model
 ```
+
+<h3>2) Finetuning</h3>
 
 <b>Finetune the model</b>
 
