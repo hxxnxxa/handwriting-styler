@@ -3,3 +3,4 @@ finetuned_model/*
 testing/*
 test-tfrecords-output/*
 train-tfrecords-output/*
+images/*

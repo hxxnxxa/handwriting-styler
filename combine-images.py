@@ -3,6 +3,7 @@ import io
 import os
 import argparse
 
+
 # imports related to preprocess from pix2pix
 import tfimage as im
 import time
@@ -17,13 +18,14 @@ import shutil
 index = 0
 total_count = 0
 
-SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 # Default data paths.
-DEFAULT_LABEL_FILE = os.path.join(SCRIPT_PATH,
-                                  '../labels/2350-common-hangul.txt')
-DEFAULT_OUTPUT_DIR = os.path.join(SCRIPT_PATH, '../src-trg-image-data')
+base_path = os.path.dirname(os.path.abspath(__file__))
+lbl_path = os.path.join(base_path,'labels/2350-common-hangul.txt')
+output_path = os.path.join(base_path, 'src-trg-image-data')
 
+
+# Remove directory after combining
 def remove_dir(path):
     """ param <path> could either be relative or absolute. """
     if os.path.isfile(path) or os.path.islink(path):
@@ -33,31 +35,39 @@ def remove_dir(path):
     else:
         raise ValueError("file {} is not a file or dir.".format(path))
 
+
+# Combine src with src_path
 def combine(src, src_path):
     if args.b_dir is None:
         raise Exception("missing b_dir")
 
+
     # find corresponding file in b_dir, could have a different extension
     basename, _ = os.path.splitext(os.path.basename(src_path))
+    #print("basename: ",basename) # NanumBareunGothic_AC00
     for ext in [".png", ".jpg"]:
-        sibling_path = os.path.join(args.b_dir, basename + ext)
+        sibling_path = os.path.join(args.b_dir, basename + ext) # tgt-image-data-modified\Arita-buri\NanumBareunGothic_AC00.png \n tgt-image-data-modified\Arita-buri\NanumBareunGothic_AC00.jpg
+        print("sibling_path:", sibling_path)
         if os.path.exists(sibling_path):
             sibling = im.load(sibling_path)
             break
     else:
         raise Exception("could not find sibling image for " + src_path)
 
+
     # make sure that dimensions are correct
     height, width, _ = src.shape
     if height != sibling.shape[0] or width != sibling.shape[1]:
         raise Exception("differing sizes")
     
+
     # convert both images to RGB if necessary
     if src.shape[2] == 1:
         src = im.grayscale_to_rgb(images=src)
 
     if sibling.shape[2] == 1:
         sibling = im.grayscale_to_rgb(images=sibling)
+
 
     # remove alpha channel
     if src.shape[2] == 4:
@@ -68,6 +78,8 @@ def combine(src, src_path):
 
     return np.concatenate([src, sibling], axis=1)
 
+
+# Procss with src_path, dst_path, image_dir
 def process(src_path, dst_path, image_dir):
     global index
     global total_count
@@ -81,11 +93,15 @@ def process(src_path, dst_path, image_dir):
         raise Exception("invalid operation")
     im.save(dst, dst_path)
 
+
+# Initialize
 complete_lock = threading.Lock()
 start = None
 num_complete = 0
 total = 0
 
+
+# Notify completion 
 def complete():
     global num_complete, rate, last_complete
 
@@ -104,7 +120,8 @@ def complete():
         last_complete = now
 
 
-def generate_hangul_skeleton_combine_images(label_file, output_dir):
+# Generate combined image
+def generate_hangul_combined_images(label_file, output_dir):
     if not os.path.exists(args.output_dir):
         os.makedirs(args.output_dir)
 
@@ -149,27 +166,25 @@ def generate_hangul_skeleton_combine_images(label_file, output_dir):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input_dir", required=True, 
-                            help="path to folder containing images")
-    parser.add_argument('--output-dir', type=str, dest='output_dir',
-                            default=DEFAULT_OUTPUT_DIR,
-                            help='Output directory to store generated hangul skeleton images and '
-                                 'label CSV file.')
+    parser.add_argument("--input_dir", required=True, help="path to folder containing images")
+    parser.add_argument('--output_dir', type=str, dest='output_dir',default=output_path,help='Output directory to store generated hangul skeleton images and ''label CSV file.')
     parser.add_argument("--operation", required=True, choices=["combine"])
     parser.add_argument("--workers", type=int, default=1, help="number of workers")
-    # combine
+
+
+    # Combine
     parser.add_argument("--b_dir", type=str, help="path to folder containing B images for combine operation")
-    parser.add_argument('--label-file', type=str, dest='label_file',
-                        default=DEFAULT_LABEL_FILE,
-                        help='File containing newline delimited labels.')
+    parser.add_argument('--label-file', type=str, dest='label_file',default=lbl_path,help='File containing newline delimited labels.')
     args = parser.parse_args()
 
-    generate_hangul_skeleton_combine_images(args.label_file, args.output_dir)
 
-    # remove the src and target directories
-    src_head, _ = os.path.split(args.input_dir)
-    trg_head, _ = os.path.split(args.b_dir)
-    print("Removing the directories")
-    remove_dir(src_head)
-    remove_dir(trg_head)
-    print("*** DONE ***")
+    generate_hangul_combined_images(args.label_file, args.output_dir)
+
+
+    # (Not use) Remove the src and target directories
+    #src_head, _ = os.path.split(args.input_dir)
+    #trg_head, _ = os.path.split(args.b_dir)
+    #print("Removing the directories")
+    #remove_dir(src_head)
+    #remove_dir(trg_head)
+    #print("*** DONE ***")

@@ -1,32 +1,49 @@
 #!/usr/bin/env python
 
+
+# Imports libraries
 import argparse
 import math
 import os
 import random
 import glob
-
 import numpy as np
 import tensorflow as tf
 
-SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
+
 
 # Default data paths.
-DEFAULT_LABEL_FILE = os.path.join(SCRIPT_PATH,'labels/2350-common-hangul.txt')
-DEFAULT_OUTPUT_DIR = os.path.join(SCRIPT_PATH, 'train-tfrecords-output')
-DEFAULT_IMAGES_DIR = os.path.join(SCRIPT_PATH, 'combine-image-data/images')
+base_path = os.path.dirname(os.path.abspath(__file__))
+lbl_path = os.path.join(base_path,'labels/2350-common-hangul.txt')
+#output_path = os.path.join(base_path, 'train-tfrecords-output')
+output_path = os.path.join(base_path, 'train-tfrecords-output-modified')
+
+
+# Default data paths
+#images_path = os.path.join(base_path, 'combine-image-data/images')
+images_path = os.path.join(base_path, 'images/combined_images/total')
+
+
+# Default 
 DEFAULT_NUM_SHARDS_TRAIN = 1
 DEFAULT_NUM_SHARDS_TEST = 1
 
+
+
 def _int64_feature(value):
     return tf.train.Feature(int64_list=tf.train.Int64List(value=[value]))
+
+
 
 def _bytes_feature(value):
     return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
 
 
+
 class TFRecordsConverter(object):
     """Class that handles converting images to TFRecords."""
+
+
 
     def __init__(self, image_dir, output_dir,
                  num_shards_train):
@@ -44,6 +61,8 @@ class TFRecordsConverter(object):
 
         # Counter for total number of images processed.
         self.counter = 0
+
+
 
     def process_image_labels(self, image_dir):
         # Get a list of the fonts.
@@ -81,6 +100,8 @@ class TFRecordsConverter(object):
         
         return filenames, style_labels, character_labels
 
+
+
     def write_tfrecords_file(self, output_path, indices):
         """Writes out TFRecords file."""
         writer = tf.python_io.TFRecordWriter(output_path)
@@ -108,6 +129,8 @@ class TFRecordsConverter(object):
             if not self.counter % 1000:
                 print('Processed {} images...'.format(self.counter))
         writer.close()
+
+
 
     def convert(self):
         """This function will drive the conversion to TFRecords.
@@ -144,21 +167,16 @@ class TFRecordsConverter(object):
         print('\nProcessed {} total images...'.format(self.counter))
         print('Number of training examples: {}'.format(num_files_train))
 
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--output-dir', type=str, dest='output_dir',
-                        default=DEFAULT_OUTPUT_DIR,
-                        help='Output directory to store TFRecords files.')
-    parser.add_argument('--num-shards-train', type=int,
-                        dest='num_shards_train',
-                        default=DEFAULT_NUM_SHARDS_TRAIN,
-                        help='Number of shards to divide training set '
-                             'TFRecords into.')
-    parser.add_argument('--image-dir', type=str, dest='image_dir',
-                        default=DEFAULT_IMAGES_DIR,
-                        help='Directory of combine src and trg images.')
+    parser.add_argument('--output-dir', type=str, dest='output_dir', default=output_path, help='Output directory to store TFRecords files.')
+    parser.add_argument('--num-shards-train', type=int, dest='num_shards_train', default=DEFAULT_NUM_SHARDS_TRAIN, help='Number of shards to divide training set TFRecords into.')
+    parser.add_argument('--image-dir', type=str, dest='image_dir', default=images_path, help='Directory of combine src and trg images.')
+
     args = parser.parse_args()
-    converter = TFRecordsConverter(args.image_dir,
-                                   args.output_dir,
-                                   args.num_shards_train)
+
+    converter = TFRecordsConverter(args.image_dir, args.output_dir, args.num_shards_train)
+
     converter.convert()
