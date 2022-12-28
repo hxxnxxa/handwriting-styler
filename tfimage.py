@@ -13,7 +13,8 @@ def create_op(func, **placeholders):
         for argname, argvalue in kwargs.items():
             placeholder = placeholders[argname]
             feed_dict[placeholder] = argvalue
-        return tf.get_default_session().run(op, feed_dict=feed_dict)
+        #return tf.get_default_session().run(op, feed_dict=feed_dict)
+        return tf.compat.v1.get_default_session().run(op, feed_dict=feed_dict)
 
     return f
 
