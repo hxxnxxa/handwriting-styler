@@ -1,12 +1,8 @@
-trained_model/*
-finetuned_model/*
+trained_model*/*
+finetuned_model*/*
 testing/*
-test-tfrecords-output/*
-train-tfrecords-output/*
+test-tfrecords-output*/*
+train-tfrecords-output*/*
 images/*
-trained_model-modified/*
-finetuned_model-modified/*
-testing-modified/*
-test-tfrecords-output-modified/*
-train-tfrecords-output-modified/*
+testing-modified*/*
 dst_dir/*

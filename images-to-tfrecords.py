@@ -14,14 +14,16 @@ import tensorflow as tf
 
 # Default data paths.
 base_path = os.path.dirname(os.path.abspath(__file__))
+#lbl_path = os.path.join(base_path,'labels/2350-common-hangul.txt')
 lbl_path = os.path.join(base_path,'labels/2350-common-hangul.txt')
 #output_path = os.path.join(base_path, 'train-tfrecords-output')
-output_path = os.path.join(base_path, 'train-tfrecords-output-modified')
+#output_path = os.path.join(base_path, 'train-tfrecords-output-modified')
+output_path = os.path.join(base_path, 'train-tfrecords-output-modified2')
 
 
 # Default data paths
 #images_path = os.path.join(base_path, 'combine-image-data/images')
-images_path = os.path.join(base_path, 'images/combined_images/total')
+images_path = os.path.join(base_path, 'images/combined/total')
 
 
 # Default 
@@ -107,8 +109,12 @@ class TFRecordsConverter(object):
         writer = tf.python_io.TFRecordWriter(output_path)
         for i in indices:
             filename = self.filenames[i]
+            #print("filename: ",filename)
             style_label = int(self.style_labels[i])
+            # print("style_labels[i] : ",self.style_labels[i]) # NanumBareunGothic
+            style_label = i
             character_label = int(self.character_labels[i])
+            #character_label = i
             with tf.gfile.GFile(filename, 'rb') as f:
                 im_data = f.read()
 

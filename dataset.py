@@ -8,9 +8,12 @@ import collections
 from utils import *
 
 SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
-train_tfrecords_dir = os.path.join(SCRIPT_PATH, 'train-tfrecords-output')
-test_tfrecords_dir = os.path.join(SCRIPT_PATH, 'test-tfrecords-output')
-trg_font_path = os.path.join(SCRIPT_PATH, 'tgt_font')
+#train_tfrecords_dir = os.path.join(SCRIPT_PATH, 'train-tfrecords-output')
+#test_tfrecords_dir = os.path.join(SCRIPT_PATH, 'test-tfrecords-output')
+#trg_font_path = os.path.join(SCRIPT_PATH, 'tgt_font')
+train_tfrecords_dir = os.path.join(SCRIPT_PATH, 'train-tfrecords-output-modified2')
+test_tfrecords_dir = os.path.join(SCRIPT_PATH, 'test-tfrecords-output-modified2')
+trg_font_path = os.path.join(SCRIPT_PATH, 'fonts/tgt_font_selected')
 
 CROP_SIZE = 256
 # parameters for style embedding
