@@ -9,9 +9,10 @@ from PIL import Image, ImageFont, ImageDraw
 
 # Default data paths.
 base_path = os.path.dirname(os.path.abspath(__file__))
-lbl_path = os.path.join(base_path, 'labels/2350-unicode.txt')
+#lbl_path = os.path.join(base_path, 'labels/2350-unicode.txt')
+lbl_path = os.path.join(base_path, 'labels/2350-common-hangul.txt')
 tgt_ttf_path = os.path.join(base_path, 'fonts/tgt_font_selected')
-output_path = os.path.join(base_path, 'tgt-image-data-modified')
+output_path = os.path.join(base_path, 'images/tgt_sequential')
 
 
 # Width and height of the resulting image.
@@ -43,22 +44,27 @@ def generate_hangul_images(lbl, tgt_fonts_dir, output_dir):
 
     # Get a list of the fonts.
     fonts = glob.glob(os.path.join(tgt_fonts_dir, '*.ttf'))
+    # fonts:  ['D:\\workspace\\hh-handwriting\\fonts/tgt_font_selected\\Arita-buri.ttf', 'D:\\workspace\\hh-handwriting\\fonts/tgt_font_selected\\Hanna.ttf', 'D:\\workspace\\hh-handwriting\\fonts/tgt_font_selected\\JejuGothic.ttf', 'D:\\workspace\\hh-handwriting\\fonts/tgt_font_selected\\JejuHanlasan.ttf', 'D:\\workspace\\hh-handwriting\\fonts/tgt_font_selected\\NanumHandwriting.ttf']
     fonts_name = os.listdir('fonts/tgt_font_selected')
+    #print("fonts: ",fonts) 
 
     total_count = 0
     prev_count = 0
     font_count = 0
     char_no = 0
+    font_idx = 56
 
 
     # Total number of font files is 
-    print('total number of fonts are ', len(fonts))
+    print('total number of fonts are ', len(fonts)) # total number of fonts are  5
 
     for character in labels: # 2350
-        hangul_character = chr(int(character, 16))
+        #hangul_character = chr(int(character, 16))
         char_no += 1
-        
-        
+
+
+        #print('{} images generated...'.format(char_no))
+
         # Print image count roughly every 5000 images.
         if total_count - prev_count > 5000:
             prev_count = total_count
@@ -66,23 +72,33 @@ def generate_hangul_images(lbl, tgt_fonts_dir, output_dir):
             
             
         for font in fonts:
+            print("font: ", font)
             total_count += 1
             font_count += 1
             
             font_name = (os.path.splitext(fonts_name[font_count - 1])[0])
+            #font_name,_ = (os.path.splitext(fonts_name))
             
             image = Image.new("RGB", (256,256), (255, 255, 255))
             font = ImageFont.truetype(font, 160)
             drawing = ImageDraw.Draw(image)
-            w, h = drawing.textsize(hangul_character, font=font)
-            drawing.text(((width-w)/2, (height-h)/2),hangul_character,fill=(0,0,0),font=font)
-            file_string = '{}_{}.png'.format(font_name,character)
+
+            #w, h = drawing.textsize(hangul_character, font=font)
+            w, h = drawing.textsize(character, font=font)
+            
+            
+            #drawing.text(((width-w)/2, (height-h)/2),hangul_character,fill=(0,0,0),font=font)
+            drawing.text(((width-w)/2, (height-h)/2),character,fill=(0,0,0),font=font)
+            
+            #file_string = '{}_{}.png'.format(font_name,character)
+            file_string = '{}_{}.png'.format(font_name,char_no)
+            #file_string = '{}_{}.png'.format(font_idx, char_no)
+            
             file_path = os.path.join(image_dir, file_string)
             image.save(file_path, 'PNG')
-            
         font_count = 0
-        
     char_no = 0
+    font_idx += 1
 
     print('Finished generating {} images.'.format(total_count))
 

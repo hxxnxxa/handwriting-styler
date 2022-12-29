@@ -9,7 +9,7 @@ EPS = 1e-12
 
 SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
 #trg_font_path = os.path.join(SCRIPT_PATH, 'tgt_font')
-trg_font_path = os.path.join(SCRIPT_PATH, 'tgt_font_selected')
+trg_font_path = os.path.join(SCRIPT_PATH, 'fonts/tgt_font_selected')
 
 Model = collections.namedtuple("Model", "outputs, predict_real, predict_fake, disc_real_loss, disc_fake_loss, disc_loss_real_styl, discrim_grads_and_vars, gen_loss_GAN, gen_loss_L1, gen_grads_and_vars, train")
 

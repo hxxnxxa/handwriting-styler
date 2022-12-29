@@ -9,9 +9,10 @@ from PIL import Image, ImageFont, ImageDraw
 
 # Default data paths.
 base_path = os.path.dirname(os.path.abspath(__file__))
-lbl_path = os.path.join(base_path, 'labels/2350-unicode.txt')
+#lbl_path = os.path.join(base_path, 'labels/2350-unicode.txt')
+lbl_path = os.path.join(base_path, 'labels/2350-common-hangul.txt')
 src_ttf_path = os.path.join(base_path, 'fonts/src_font')
-output_path = os.path.join(base_path, 'src-image-data-modified')
+output_path = os.path.join(base_path, 'images/src_sequential')
 
 
 # Width and height of the resulting image.
@@ -49,10 +50,10 @@ def generate_hangul_images(lbl, src_fonts_path, output_dir):
     char_no = 0
 
     for character in labels:
-        hangul_character = chr(int(character, 16))
+        #hangul_character = chr(int(character, 16))
         char_no += 1
 
-        print('{} images generated...'.format(c))
+        print('{} images generated...'.format(char_no))
 
         for x in range(len(src_fonts_path)):
             font_count += 1
@@ -62,9 +63,12 @@ def generate_hangul_images(lbl, src_fonts_path, output_dir):
                 image = Image.new("RGB", (256,256), (255, 255, 255))
                 font = ImageFont.truetype(font, 160)
                 drawing = ImageDraw.Draw(image)
-                w, h = drawing.textsize(hangul_character, font=font)
-                drawing.text(((width-w)/2, (height-h)/2),hangul_character,fill=(0,0,0),font=font)
-                file_string = '{}_{}.png'.format('NanumBareunGothic', character)
+                #w, h = drawing.textsize(hangul_character, font=font)
+                w, h = drawing.textsize(character, font=font)
+                #drawing.text(((width-w)/2, (height-h)/2),hangul_character,fill=(0,0,0),font=font)
+                drawing.text(((width-w)/2, (height-h)/2),character,fill=(0,0,0),font=font)
+                #file_string = '{}_{}.png'.format('NanumBareunGothic', character)
+                file_string = '{}_{}.png'.format('55', char_no)
                 file_path = os.path.join(image_dir, file_string)
                 image.save(file_path, 'PNG')
         font_count = 0

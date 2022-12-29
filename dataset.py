@@ -11,8 +11,8 @@ SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
 #train_tfrecords_dir = os.path.join(SCRIPT_PATH, 'train-tfrecords-output')
 #test_tfrecords_dir = os.path.join(SCRIPT_PATH, 'test-tfrecords-output')
 #trg_font_path = os.path.join(SCRIPT_PATH, 'tgt_font')
-train_tfrecords_dir = os.path.join(SCRIPT_PATH, 'train-tfrecords-output-modified2')
-test_tfrecords_dir = os.path.join(SCRIPT_PATH, 'test-tfrecords-output-modified2')
+train_tfrecords_dir = os.path.join(SCRIPT_PATH, 'train-tfrecords-output-modified')
+test_tfrecords_dir = os.path.join(SCRIPT_PATH, 'test-tfrecords-output-modified')
 trg_font_path = os.path.join(SCRIPT_PATH, 'fonts/tgt_font_selected')
 
 CROP_SIZE = 256
@@ -32,7 +32,8 @@ Examples = collections.namedtuple("Examples", "paths, src_font, trg_font, count,
 ############################################################################################ 
 
 def _parse_function(example, a):
-    features = tf.parse_single_example(
+    #features = tf.parse_single_example(
+    features = tf.io.parse_single_example(
         example,
         features={
             'image/encoded': tf.FixedLenFeature([], dtype=tf.string, default_value=''),
@@ -125,7 +126,8 @@ def load_examples(args):
     else:
         print('Processing the Train TFRecord File')
         tf_record_pattern = os.path.join(train_tfrecords_dir, '%s-*' % 'train')
-        train_data_files = tf.gfile.Glob(tf_record_pattern)
+        #train_data_files = tf.gfile.Glob(tf_record_pattern)
+        train_data_files = tf.io.gfile.glob(tf_record_pattern)
 
         # Create training dataset input pipeline.
         train_dataset = tf.data.TFRecordDataset(train_data_files) \
