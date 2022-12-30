@@ -6,3 +6,4 @@ train-tfrecords-output*/*
 images/*
 testing-modified*/*
 dst_dir/*
+fonts/*
