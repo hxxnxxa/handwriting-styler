@@ -109,6 +109,7 @@ def load_examples(args):
             print('Processing the Test TFRecord File')
             tf_record_pattern = os.path.join(test_tfrecords_dir, '%s-*' % 'test')
             test_data_files = tf.gfile.Glob(tf_record_pattern)
+            #test_data_files = tf.io.gfile.Glob(tf_record_pattern)
 
             # Create testing dataset input pipeline.
             test_dataset = tf.data.TFRecordDataset(test_data_files) \
@@ -126,8 +127,8 @@ def load_examples(args):
     else:
         print('Processing the Train TFRecord File')
         tf_record_pattern = os.path.join(train_tfrecords_dir, '%s-*' % 'train')
-        #train_data_files = tf.gfile.Glob(tf_record_pattern)
-        train_data_files = tf.io.gfile.glob(tf_record_pattern)
+        train_data_files = tf.gfile.Glob(tf_record_pattern)
+        #train_data_files = tf.io.gfile.glob(tf_record_pattern)
 
         # Create training dataset input pipeline.
         train_dataset = tf.data.TFRecordDataset(train_data_files) \

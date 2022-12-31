@@ -12,8 +12,7 @@ import tensorflow as tf
 SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 # Default data paths.
-DEFAULT_LABEL_FILE = os.path.join(SCRIPT_PATH,
-                                  'labels/2350-common-hangul.txt')
+DEFAULT_LABEL_FILE = os.path.join(SCRIPT_PATH,'labels/2350-common-hangul.txt')
 DEFAULT_OUTPUT_DIR = os.path.join(SCRIPT_PATH, 'train-tfrecords-output-modified')
 DEFAULT_IMAGES_DIR = os.path.join(SCRIPT_PATH, 'images/combine_sequential')
 DEFAULT_NUM_SHARDS_TRAIN = 1
@@ -89,8 +88,8 @@ class TFRecordsConverter(object):
             filename = self.filenames[i]
             style_label = int(self.style_labels[i])
             #print("style_label : ", int(self.style_labels[i]))
-            #character_label = int(self.character_labels[i])
-            character_label = int(self.character_labels[i][:-4])
+            character_label = int(self.character_labels[i])
+            #character_label = int(self.character_labels[i][:-4])
             with tf.gfile.GFile(filename, 'rb') as f:
                 im_data = f.read()
 

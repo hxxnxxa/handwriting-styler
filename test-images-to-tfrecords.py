@@ -100,13 +100,15 @@ class TFRecordsConverter(object):
 
     def write_tfrecords_file(self, output_path, indices):
         """Writes out TFRecords file."""
-        writer = tf.python_io.TFRecordWriter(output_path)
+        writer = tf.io.TFRecordWriter(output_path)
+        #writer = tf.python_io.TFRecordWriter(output_path)
+        #writer = tf.compat.v1.python_io.TFRecordWriter(output_path)
         for i in indices:
             filename = self.filenames[i]
             style_label = int(self.style_labels[i])
             #character_label = int(self.character_labels[i])
             character_label = int(self.character_labels[i][:-4])
-            with tf.gfile.GFile(filename, 'rb') as f:
+            with tf.io.gfile.GFile(filename, 'rb') as f:
                 im_data = f.read()
 
             # Example is a data format that contains a key-value store, where
