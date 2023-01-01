@@ -25,6 +25,6 @@ REM python combine-images.py --input_dir src-image-data/images --b_dir tgt-image
 REM python images-to-tfrecords.py
 REM python main.py --mode train --output_dir trained_model-modified --max_epochs 100
 REM python test-images-to-tfrecords.py
-python main.py --mode test --output_dir testing-modified-221231 --checkpoint trained_model-modified
+REM python main.py --mode test --output_dir testing-modified-221231 --checkpoint trained_model-modified
 python main.py --mode train --output_dir finetuned_model-modified--221231 --max_epochs 100 --checkpoint trained_model-modified
 python main.py --mode test --output_dir testing-modified--221231-2 --checkpoint finetuned_model-modified
