@@ -37,5 +37,5 @@ started at December 23th Friday, 2022
 <br>
 
 <div align=center>
-    Copyright HyunHwa Oh, 2022 All rights reserved.
+    Copyright 2023, HyunHwa Oh, All rights reserved.
 </div>
