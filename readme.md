@@ -12,6 +12,7 @@ started at December 23th Friday, 2022
 
 <br>
 <br>
+<br>
 
 <h2>Architecture</h2>
 <img src="architecture\architecture.png"/>
@@ -32,6 +33,7 @@ started at December 23th Friday, 2022
 1. Pre-trained <br>
 2. Fine-tuning
 
+<br>
 <br>
 <br>
 <br>
