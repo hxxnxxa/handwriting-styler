@@ -29,7 +29,7 @@ started at December 23th Friday, 2022
 <br>
 
 <h2>Stages</h2>
-1. Pre-trained
+1. Pre-trained <br>
 2. Fine-tuning
 
 <br>
