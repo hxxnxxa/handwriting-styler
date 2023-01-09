@@ -1,0 +1,6 @@
+skipping 0 files that already exist
+processing 2350 files
+basename:  1
+1_ 1
+sibling_path: images\tgt_sequential-56\images\1.png
+sibling_path: images\tgt_sequential-56\images\1.jpg

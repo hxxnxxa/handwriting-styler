@@ -17,12 +17,15 @@ import shutil
 # setting global variable for counter 
 index = 0
 total_count = 0
+font_idx = 0
 
 
 # Default data paths.
 base_path = os.path.dirname(os.path.abspath(__file__))
-lbl_path = os.path.join(base_path,'labels/2350-common-hangul.txt')
-output_path = os.path.join(base_path, 'images/combined_sequential')
+lbl_path = os.path.join(base_path,'../labels/2350-common-hangul.txt')
+output_path = os.path.join(base_path, '../images/combined_sequential-53_230106')
+input_path = os.path.join(base_path, '../images/tgt_sequential-56/images')
+b_dir = os.path.join(base_path, '../images/tgt_sequential-56/images')
 
 
 # Remove directory after combining
@@ -44,10 +47,11 @@ def combine(src, src_path):
 
     # find corresponding file in b_dir, could have a different extension
     basename, _ = os.path.splitext(os.path.basename(src_path))
-    #print("basename: ",basename) # NanumBareunGothic_AC00
+    print("basename: ",basename) # 1
+    print("1_",basename) # 1
     for ext in [".png", ".jpg"]:
         sibling_path = os.path.join(args.b_dir, basename + ext) # tgt-image-data-modified\Arita-buri\NanumBareunGothic_AC00.png \n tgt-image-data-modified\Arita-buri\NanumBareunGothic_AC00.jpg
-        #print("sibling_path:", sibling_path)
+        print("sibling_path:", sibling_path)
         if os.path.exists(sibling_path):
             sibling = im.load(sibling_path)
             break
@@ -86,6 +90,7 @@ def process(src_path, dst_path, image_dir):
 
     total_count += 1
     src = im.load(src_path)
+    #print("src_path: ",src_path)
 
     if args.operation == "combine":
         dst = combine(src, src_path)
@@ -166,14 +171,13 @@ def generate_hangul_combined_images(label_file, output_dir):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input_dir", required=True, help="path to folder containing images")
-    parser.add_argument('--output_dir', type=str, dest='output_dir',default=output_path,help='Output directory to store generated hangul skeleton images and ''label CSV file.')
+    parser.add_argument("--input_dir", type=str, dest='input_dir',default=input_path, required=True, help="path to folder containing images")
+    parser.add_argument('--output_dir', type=str, dest='output_dir',default=output_path, help='Output directory to store generated hangul skeleton images and ''label CSV file.')
     parser.add_argument("--operation", required=True, choices=["combine"])
     parser.add_argument("--workers", type=int, default=1, help="number of workers")
 
-
     # Combine
-    parser.add_argument("--b_dir", type=str, help="path to folder containing B images for combine operation")
+    parser.add_argument("--b_dir", type=str, dest='b_dir', default=b_dir, help="path to folder containing B images for combine operation")
     parser.add_argument('--label-file', type=str, dest='label_file',default=lbl_path,help='File containing newline delimited labels.')
     args = parser.parse_args()
 
