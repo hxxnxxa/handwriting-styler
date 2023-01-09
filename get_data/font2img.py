@@ -40,6 +40,7 @@ def generate_hangul_images(label_file, fonts_dir, output_dir):
     # Get a list of the fonts.
     #fonts = glob.glob(os.path.join(src_fonts_dir, '*.ttf'))
     fonts = glob.glob(os.path.join(fonts_dir, '*.ttf'))
+    print('total number of fonts are ', len(fonts))
 
 
     # Get a list of the  tgt fonts.
@@ -59,22 +60,20 @@ def generate_hangul_images(label_file, fonts_dir, output_dir):
         if total_count - prev_count > 5000:
             prev_count = total_count
             print('{} images generated...'.format(total_count))
-            
-        #for x in range(len(tgt_fonts)):
-        for x in range(len(fonts)):
+
+        for font in fonts:
+            total_count += 1
             font_count += 1
-            
-            for font in fonts:
-                total_count += 1
-                #image = Image.new('L', (IMAGE_WIDTH, IMAGE_HEIGHT), color=255)
-                image = Image.new("RGB", (256,256), (255, 255, 255))
-                font = ImageFont.truetype(font, 170)
-                drawing = ImageDraw.Draw(image)
-                w, h = drawing.textsize(character, font=font)
-                drawing.text(((IMAGE_WIDTH-w)/2, (IMAGE_HEIGHT-h)/2),character,fill=(0),font=font)
-                file_string = '{:d}_{:05d}.png'.format(font_count,char_no)
-                file_path = os.path.join(image_dir, file_string)
-                image.save(file_path, 'PNG')
+            image = Image.new("RGB", (256,256), (255, 255, 255))
+            #image = Image.new('L', (IMAGE_WIDTH, IMAGE_HEIGHT), color=255)
+            font = ImageFont.truetype(font, 170)
+            drawing = ImageDraw.Draw(image)
+            w, h = drawing.textsize(character, font=font)
+            drawing.text(((IMAGE_WIDTH-w)/2, (IMAGE_HEIGHT-h)/2),character,fill=(0),font=font)
+            file_string = '{:d}_{:05d}.png'.format(font_count,char_no)
+            file_path = os.path.join(image_dir, file_string)
+            image.save(file_path, 'PNG')
+
         font_count = 0
     char_no = 0
 
